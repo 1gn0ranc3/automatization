@@ -1,0 +1,2 @@
+# Одинаковые версии при локальной установке и в Docker/CI.
+-r requirements.lock.txt

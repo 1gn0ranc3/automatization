@@ -1,0 +1,5 @@
+*
+!controller.Dockerfile
+!agent.Dockerfile
+!plugins.txt
+!controller-executors.groovy

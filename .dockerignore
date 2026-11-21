@@ -1,0 +1,17 @@
+.venv
+.idea
+.git
+.env
+.env.*
+!.env.example
+**/*.sqlite
+**/*.sqlite-*
+**/*.db
+__pycache__
+**/__pycache__
+.pytest_cache
+.ruff_cache
+artifacts
+allure-results
+allure-report
+test-results

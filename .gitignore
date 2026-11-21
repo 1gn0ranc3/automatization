@@ -1,0 +1,17 @@
+.venv/
+.idea/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-*
+*.db
+artifacts/
+allure-results/
+allure-report/
+test-results/
+.DS_Store

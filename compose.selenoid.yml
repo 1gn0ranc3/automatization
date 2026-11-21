@@ -1,0 +1,54 @@
+name: ${SELENOID_PROJECT:-automatization-selenoid}
+
+services:
+  selenoid:
+    build: ./infra/selenoid
+    environment:
+      DOCKER_API_VERSION: "1.45"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "127.0.0.1:${SELENOID_PORT:-4444}:4444"
+    command:
+      - -container-network
+      - ${SELENOID_PROJECT:-automatization-selenoid}_default
+      - -limit
+      - "2"
+      - -timeout
+      - 2m
+      - -service-startup-timeout
+      - 60s
+      - -disable-privileged
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://localhost:4444/ping]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  # Только загрузка образа; браузеры создаёт сам Selenoid по browsers.json.
+  chrome-image:
+    profiles: [images]
+    image: selenoid/vnc_chrome:128.0
+    platform: linux/amd64
+
+  runner:
+    profiles: [tests]
+    build:
+      context: .
+      args:
+        INSTALL_SELENOID: "true"
+    environment:
+      SELENOID_URL: http://selenoid:4444/wd/hub
+      SELENOID_PROJECT: ${SELENOID_PROJECT:-automatization-selenoid}
+      DEMOQA_BASE_URL: ${DEMOQA_BASE_URL:-https://demoqa.com}
+      UI_TIMEOUT_MS: ${UI_TIMEOUT_MS:-10000}
+      WORKERS: ${WORKERS:-0}
+      SELENOID_MARKERS: ${SELENOID_MARKERS:-selenoid}
+      TEST_EVENTS: ${TEST_EVENTS:-false}
+      ARTIFACTS: /work/artifacts
+    volumes:
+      - ${ARTIFACTS:-./artifacts/selenoid}:/work/artifacts
+    depends_on:
+      selenoid:
+        condition: service_healthy
+    command: [make, selenoid-tests, PYTHON=python, "PYTEST_ARGS=-o cache_dir=/tmp/pytest-cache"]

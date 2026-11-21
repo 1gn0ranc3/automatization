@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>HTTP links integration fixture</title>
+<a href="/created">Created</a>
+<a href="/no-content">No Content</a>
+<a href="/invalid-url">Not Found</a>
+<p id="linkResponse" aria-live="polite"></p>
+<script>
+  document.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', async event => {
+      event.preventDefault();
+      const response = await fetch(link.href);
+      const status = document.createElement('b');
+      status.textContent = response.status;
+      const reason = document.createElement('b');
+      reason.textContent = response.statusText;
+      document.querySelector('#linkResponse').replaceChildren(
+        'HTTP ', status, ' ', reason
+      );
+    });
+  });
+</script>
+</html>

@@ -1,0 +1,28 @@
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/telemetry"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers --strict-config"
+xfail_strict = true
+markers = [
+    "integration: локальные HTTP/Chromium проверки, без публичных сайтов",
+    "telemetry: проверки инфраструктуры событий без реального брокера",
+    "kafka: интеграция с настоящим Kafka, нужен --run-kafka",
+    "api: HTTP-проверки через Requests",
+    "ui: браузерные проверки Playwright или Selenium",
+    "selenoid: отдельные Selenium Remote WebDriver проверки, нужен Selenoid",
+    "e2e: сквозной сценарий UI и API одного приложения",
+    "external: публичные DemoQA/ReqRes/Fake Store — основной набор",
+    "reqres: ReqRes API",
+    "demoqa: DemoQA Elements UI и HTTP-статусы Links",
+    "fakestore: Fake Store Products API",
+    "smoke: короткий набор критических проверок",
+    "regression: полный регрессионный набор, включая smoke",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = ["artifacts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

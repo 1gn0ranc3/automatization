@@ -1,0 +1,3 @@
+# Отдельная установка сохраняет основной Playwright-набор без Selenium.
+-c requirements.lock.txt
+selenium==4.38.0

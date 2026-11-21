@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Automation component fixture</title>
+<form id="form">
+  <input id="name" placeholder="Full Name" required>
+  <input id="email" placeholder="name@example.com" type="email" required>
+  <textarea id="currentAddress" placeholder="Current Address"></textarea>
+  <textarea id="permanentAddress"></textarea>
+  <button type="submit">Submit</button>
+</form>
+<output id="output"></output>
+<button id="click">Click Me</button><p id="dynamicClickMessage"></p>
+<button id="double">Double Click Me</button><p id="doubleClickMessage"></p>
+<button id="right">Right Click Me</button><p id="rightClickMessage"></p>
+<button id="enable" disabled>Will enable 5 seconds</button>
+<button id="visible" hidden>Visible After 5 Seconds</button>
+<button id="start">Start transition</button>
+<script>
+  const element = id => document.getElementById(id);
+  element('form').addEventListener('submit', event => {
+    event.preventDefault();
+    element('output').textContent = ['name', 'email', 'currentAddress', 'permanentAddress']
+      .map(id => element(id).value).join('|');
+  });
+  for (const [id, eventName, output] of [
+    ['click', 'click', 'dynamicClickMessage'],
+    ['double', 'dblclick', 'doubleClickMessage'],
+    ['right', 'contextmenu', 'rightClickMessage'],
+  ]) {
+    element(id).addEventListener(eventName, event => {
+      event.preventDefault();
+      element(output).textContent = 'done';
+    });
+  }
+  element('start').addEventListener('click', () => setTimeout(() => {
+    element('enable').disabled = false;
+    element('visible').hidden = false;
+  }, 100));
+</script>
+</html>
